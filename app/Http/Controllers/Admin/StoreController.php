@@ -18,15 +18,13 @@ class StoreController extends Controller
 
     public function create()
     {
-        $users = User::all(['id', 'name']);
-
-        return view('admin.stores.create', compact('users'));
+        return view('admin.stores.create');
     }
 
     public function store(Request $request)
     {
         $data = $request->all();
-        $user = User::find($data['user']);
+        $user = auth()->user();
         $user->store()->create($data);
 
         flash('Loja criada com sucesso.')->success();
