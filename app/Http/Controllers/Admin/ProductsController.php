@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Category;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
 use App\Product;
@@ -17,21 +18,26 @@ class ProductsController extends Controller
 
     public function index()
     {
-        $products = $this->product->paginate(10);
+        $store = auth()->user()->store;
+        $products = $store->products()->paginate(10);
 
         return view('admin.products.index', compact('products'));
     }
 
     public function create()
     {
-        return view('admin.products.create');
+        $categories = Category::all(['id', 'name']);
+
+        return view('admin.products.create', compact('categories'));
     }
 
     public function store(ProductRequest $request)
     {
         $data = $request->all();
         $store = auth()->user()->store;
-        $store->products()->create($data);
+        $product = $store->products()->create($data);
+
+        $product->categories()->sync($data['categories']);
 
         flash('Produto criado com sucesso.')->success();
 
@@ -45,13 +51,17 @@ class ProductsController extends Controller
 
     public function edit(Product $product)
     {
-        return view('admin.products.edit', compact('product'));
+        $categories = Category::all(['id', 'name']);
+
+        return view('admin.products.edit', compact('product', 'categories'));
     }
 
     public function update(ProductRequest $request, Product $product)
     {
         $data = $request->all();
         $product->update($data);
+
+        $product->categories()->sync($data['categories']);
 
         flash('Produto atualizado com sucesso.')->success();
 
