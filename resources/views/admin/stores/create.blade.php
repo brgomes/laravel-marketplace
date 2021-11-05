@@ -3,7 +3,7 @@
 @section('content')
     <h1>Criar loja</h1>
 
-    <form method="post" action="{{ route('admin.stores.store') }}">
+    <form method="post" action="{{ route('admin.stores.store') }}" enctype="multipart/form-data">
         @csrf
 
         <div class="form-group">
@@ -40,6 +40,11 @@
             @error('mobile_phone')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
+        </div>
+
+        <div class="form-group">
+            <label>Logomarca</label>
+            <input type="file" name="logo" class="form-control">
         </div>
 
         <div class="form-group">
