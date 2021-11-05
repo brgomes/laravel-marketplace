@@ -28,11 +28,6 @@
         </div>
 
         <div class="form-group">
-            <label>Slug</label>
-            <input type="text" name="slug" class="form-control" value="{{ $store->slug }}">
-        </div>
-
-        <div class="form-group">
             <p>
                 <img src="{{ asset('storage/' . $store->logo) }}" alt="" class="img-fluid" />
             </p>

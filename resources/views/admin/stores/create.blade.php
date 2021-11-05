@@ -53,11 +53,6 @@
             @enderror
         </div>
 
-        <div class="form-group">
-            <label>Slug</label>
-            <input type="text" name="slug" class="form-control">
-        </div>
-
         <div>
             <button type="submit" class="btn btn-primary">Salvar</button>
         </div>

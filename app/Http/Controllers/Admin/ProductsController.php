@@ -38,10 +38,12 @@ class ProductsController extends Controller
     public function store(ProductRequest $request)
     {
         $data = $request->all();
+        $categories = $request->get('categories', null);
         $store = auth()->user()->store;
+
         $product = $store->products()->create($data);
 
-        $product->categories()->sync($data['categories']);
+        $product->categories()->sync($categories);
 
         if ($request->hasFile('photos')) {
             $images = $this->imageUpload($request->file('photos'), 'image');
@@ -69,9 +71,12 @@ class ProductsController extends Controller
     public function update(ProductRequest $request, Product $product)
     {
         $data = $request->all();
+        $categories = $request->get('categories', null);
         $product->update($data);
 
-        $product->categories()->sync($data['categories']);
+        if (isset($categories)) {
+            $product->categories()->sync($categories);
+        }
 
         if ($request->hasFile('photos')) {
             $images = $this->imageUpload($request->file('photos'), 'image');
