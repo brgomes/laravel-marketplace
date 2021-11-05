@@ -3,7 +3,7 @@
 @section('content')
     <h1>Atualizar produto</h1>
 
-    <form method="post" action="{{ route('admin.products.update', $product) }}">
+    <form method="post" action="{{ route('admin.products.update', $product) }}" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
@@ -37,6 +37,11 @@
         </div>
 
         <div class="form-group">
+            <label>Fotos do produto</label>
+            <input type="file" name="photos[]" class="form-control" multiple>
+        </div>
+
+        <div class="form-group">
             <label>Slug</label>
             <input type="text" name="slug" class="form-control" value="{{ $product->slug }}">
         </div>
@@ -45,4 +50,18 @@
             <button type="submit" class="btn btn-primary">Salvar</button>
         </div>
     </form>
+
+    <hr>
+
+    <div class="row">
+        @foreach ($product->photos as $photo)
+            <div class="col-4 text-center">
+                <img src="{{ asset('storage/' . $photo->image) }}" alt="" class="img-fluid">
+                <form action="{{ route('admin.photo.remove', $photo) }}" method="post">
+                    @csrf
+                    <button type="submit" class="btn btn-danger">Remover</button>
+                </form>
+            </div>
+        @endforeach
+    </div>
 @endsection
