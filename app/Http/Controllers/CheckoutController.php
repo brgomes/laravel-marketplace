@@ -15,7 +15,13 @@ class CheckoutController extends Controller
         //session()->forget('pagseguro_session_code');
         $this->makePagSeguroSession();
 
-        return view('checkout');
+        $cartItens = array_map(function ($line) {
+            return $line['number'] * $line['price'];
+        }, session()->get('cart'));
+
+        $total = array_sum($cartItens);
+
+        return view('checkout', compact('total'));
     }
 
     public function proccess(Request $request)
@@ -101,6 +107,7 @@ class CheckoutController extends Controller
         // Set the installment quantity and value (could be obtained using the Installments
         // service, that have an example here in \public\getInstallments.php)
         list($qtd, $installmentAmount) = explode('|', $dataPost['installment']);
+        $installmentAmount = number_format($installmentAmount, 2, '.', '');
         $creditCard->setInstallment()->withParameters($qtd, $installmentAmount);
 
         // Set the credit card holder information

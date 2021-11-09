@@ -12,6 +12,13 @@
             <form action="" method="post">
                 <div class="row">
                     <div class="col-md-12 form-group">
+                        <label>Nome no cartão</label>
+                        <input type="text" name="card_name" class="form-control">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12 form-group">
                         <label>Número do cartão <span class="brand"></span></label>
                         <input type="text" name="card_number" class="form-control">
                         <input type="hidden" name="card_brand">
@@ -55,8 +62,10 @@
         PagSeguroDirectPayment.setSessionId(sessionId);
     </script>
     <script>
+        let amountTransaction = '{{ $total }}';
         let cardNumber = document.querySelector('input[name=card_number]');
         let spanBrand = document.querySelector('span.brand');
+
         cardNumber.addEventListener('keyup', function () {
             if (cardNumber.value.length >= 6) {
                 PagSeguroDirectPayment.getBrand({
@@ -65,7 +74,7 @@
                         spanBrand.innerHTML = '<img src="https://stc.pagseguro.uol.com.br/public/img/payment-methods-flags/68x30/' + res.brand.name + '.png">';
                         document.querySelector('input[name=card_brand]').value = res.brand.name;
 
-                        getInstallments(40, res.brand.name);
+                        getInstallments(amountTransaction, res.brand.name);
                     },
                     error: function(err) {
                         console.log('Error', err);
@@ -84,6 +93,7 @@
 
             PagSeguroDirectPayment.createCardToken({
                 cardNumber: document.querySelector('input[name=card_number]').value,
+                //cardName: document.querySelector('input[name=card_name]').value,
                 brand: document.querySelector('input[name=card_brand]').value,
                 cvv: document.querySelector('input[name=card_cvv]').value,
                 expirationMonth: document.querySelector('input[name=card_month]').value,
@@ -102,6 +112,7 @@
                 card_token: token,
                 hash: PagSeguroDirectPayment.getSenderHash(),
                 installment: document.querySelector('select.select_installments').value,
+                card_name: document.querySelector('input[name=card_name]').value,
                 _token: '{{ csrf_token() }}'
             };
 
