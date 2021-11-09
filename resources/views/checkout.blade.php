@@ -34,6 +34,10 @@
                         <label>Código de segurança</label>
                         <input type="text" name="card_cvv" class="form-control">
                     </div>
+
+                    <div class="col-md-7 form-group installments">
+                        
+                    </div>
                 </div>
 
                 <button class="btn btn-success">Efetuar pagamento</button>
@@ -57,6 +61,8 @@
                     cardBin: cardNumber.value.substr(0, 6),
                     success: function(res) {
                         spanBrand.innerHTML = '<img src="https://stc.pagseguro.uol.com.br/public/img/payment-methods-flags/68x30/' + res.brand.name + '.png">';
+
+                        getInstallments(40, res.brand.name);
                     },
                     error: function(err) {
                         console.log('Error', err);
@@ -67,5 +73,37 @@
                 });
             }
         });
+
+        function getInstallments(amount, brand) {
+            PagSeguroDirectPayment.getInstallments({
+                amount: amount,
+                brand: brand,
+                maxInstallmentNoInterest: 0,
+                success: function(res) {
+                    //console.log(res);
+                    let selectInstallments = drawSelectInstallments(res.installments[brand]);
+                    document.querySelector('div.installments').innerHTML = selectInstallments;
+                },
+                error: function(err) {
+                    console.log(err);
+                },
+                complete: function(res) {
+
+                },
+            });
+        }
+
+        function drawSelectInstallments(installments) {
+		    let select = '<label>Opções de Parcelamento:</label>';
+		    select += '<select class="form-control">';
+
+		    for (let l of installments) {
+		        select += `<option value="${l.quantity}|${l.installmentAmount}">${l.quantity}x de ${l.installmentAmount} = ${l.totalAmount}</option>`;
+		    }
+
+		    select += '</select>';
+
+		    return select;
+	    }
     </script>
 @endsection
