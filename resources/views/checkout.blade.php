@@ -122,6 +122,7 @@
                 data: data,
                 dataType: 'json',
                 success: function(res) {
+                    alert(res.data.message);
                     console.log(res);
                 }
             });
