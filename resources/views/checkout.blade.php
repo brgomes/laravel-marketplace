@@ -123,7 +123,8 @@
                 dataType: 'json',
                 success: function(res) {
                     alert(res.data.message);
-                    console.log(res);
+                    //console.log(res);
+                    window.location.href = '{{ route('checkout.thanks') }}?order=' + res.data.order;
                 }
             });
         }
