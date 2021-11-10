@@ -77,7 +77,7 @@
                         getInstallments(amountTransaction, res.brand.name);
                     },
                     error: function(err) {
-                        console.log('Error', err);
+                        console.log('Credit card error', err);
                     },
                     complete: function(res) {
                         //console.log('Complete', res);
