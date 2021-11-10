@@ -29,9 +29,14 @@
 
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item @if (request()->is('/')) active @endif">
-                    <a class="nav-link" href="{{ route('home') }}">Home <span
-                            class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="{{ route('home') }}">Home <span class="sr-only">(current)</span></a>
                 </li>
+
+                @foreach ($categoriesMenu as $category)
+                    <li class="nav-item @if (request()->is('category/' . $category->slug)) active @endif">
+                        <a class="nav-link" href="{{ route('category.single', ['slug' => $category->slug]) }}">{{ $category->name }}</a>
+                    </li>
+                @endforeach
             </ul>
 
             @auth
