@@ -21,8 +21,11 @@
         @auth
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
+                    <li class="nav-item @if (request()->is('admin/orders*')) active @endif">
+                        <a class="nav-link" href="{{ route('admin.orders.my') }}">Meus pedidos <span class="sr-only">(current)</span></a>
+                    </li>
                     <li class="nav-item @if (request()->is('admin/stores*')) active @endif">
-                        <a class="nav-link" href="{{ route('admin.stores.index') }}">Lojas <span class="sr-only">(current)</span></a>
+                        <a class="nav-link" href="{{ route('admin.stores.index') }}">Lojas</a>
                     </li>
                     <li class="nav-item @if (request()->is('admin/products*')) active @endif">
                         <a class="nav-link" href="{{ route('admin.products.index') }}">Produtos</a>
@@ -55,5 +58,8 @@
         @yield('content')
     </div>
 </body>
+
+<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"></script>
 
 </html>
