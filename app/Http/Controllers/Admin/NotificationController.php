@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Notifications\DatabaseNotification;
 
 class NotificationController extends Controller
 {
@@ -23,6 +24,15 @@ class NotificationController extends Controller
         });
 
         flash('Notificações lidas com sucesso.')->success();
+
+        return redirect()->back();
+    }
+
+    public function read(DatabaseNotification $notification)
+    {
+        $notification->markAsRead();
+
+        flash('Notificação lida com sucesso.')->success();
 
         return redirect()->back();
     }
