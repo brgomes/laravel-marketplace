@@ -67,6 +67,9 @@
                         <li class="nav-item">
                             <span class="nav-link">{{ auth()->user()->name }}</span>
                         </li>
+                        <li class="nav-item @if (request()->is('my-orders')) active @endif">
+                            <a href="{{ route('user.orders') }}" class="nav-link">Meus pedidos</a>
+                        </li>
                         <li class="nav-item">
                             <a href="{{ route('cart.index') }}" class="nav-link">
                                 @if (session()->has('cart'))
