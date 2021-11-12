@@ -19,12 +19,12 @@
 
         <div class="form-group">
             <label>Telefone</label>
-            <input type="text" name="phone" class="form-control" value="{{ $store->phone }}">
+            <input type="text" name="phone" id="phone" class="form-control" value="{{ $store->phone }}">
         </div>
 
         <div class="form-group">
             <label>Celular / WhatsApp</label>
-            <input type="text" name="mobile_phone" class="form-control" value="{{ $store->mobile_phone }}">
+            <input type="text" name="mobile_phone" id="mobile_phone" class="form-control" value="{{ $store->mobile_phone }}">
         </div>
 
         <div class="form-group">
@@ -48,4 +48,14 @@
             <button type="submit" class="btn btn-primary">Salvar</button>
         </div>
     </form>
+@endsection
+
+@section('scripts')
+    <script>
+        let imPhone = new Inputmask('(99) 9999-9999');
+        imPhone.mask(document.getElementById('phone'));
+
+        let imMobilePhone = new Inputmask('(99) 99999-9999');
+        imMobilePhone.mask(document.getElementById('mobile_phone'));
+    </script>
 @endsection
