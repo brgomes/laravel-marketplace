@@ -13,24 +13,29 @@ class CheckoutController extends Controller
 {
     public function index()
     {
-        if (!auth()->check()) {
-            return redirect()->route('login');
+        try {
+            if (!auth()->check()) {
+                return redirect()->route('login');
+            }
+
+            if (!session()->has('cart')) {
+                return redirect()->route('home');
+            }
+
+            //session()->forget('pagseguro_session_code');
+            $this->makePagSeguroSession();
+
+            $cartItens = array_map(function ($line) {
+                return $line['number'] * $line['price'];
+            }, session()->get('cart'));
+
+            $total = array_sum($cartItens);
+
+            return view('checkout', compact('total'));
+        } catch (\Exception $e) {
+            session()->forget('pagseguro_session_code');
+            redirect()->route('checkout.index');
         }
-
-        if (!session()->has('cart')) {
-            return redirect()->route('home');
-        }
-
-        //session()->forget('pagseguro_session_code');
-        $this->makePagSeguroSession();
-
-        $cartItens = array_map(function ($line) {
-            return $line['number'] * $line['price'];
-        }, session()->get('cart'));
-
-        $total = array_sum($cartItens);
-
-        return view('checkout', compact('total'));
     }
 
     public function proccess(Request $request)
@@ -70,7 +75,7 @@ class CheckoutController extends Controller
                 ]
             ]);
         } catch (\Exception $e) {
-            $message = env('APP_DEBUG') ? $e->getMessage() : 'Erro ao processar pedido.';
+            $message = env('APP_DEBUG') ? simplexml_load_string($e->getMessage()) : 'Erro ao processar pedido.';
 
             return response()->json([
                 'data' => [
