@@ -17,7 +17,7 @@ class CartController extends Controller
     public function add(Request $request)
     {
         $productData = $request->get('product');
-        $product = Product::whereSlug($productData['slug'])->first(['name', 'price', 'store_id']);
+        $product = Product::whereSlug($productData['slug'])->first(['id', 'name', 'price', 'store_id']);
 
         if ((null === $product) || ($productData['number'] <= 0)) {
             return redirect()->route('home');

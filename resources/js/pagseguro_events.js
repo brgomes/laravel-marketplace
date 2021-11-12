@@ -34,10 +34,11 @@ submitButton.addEventListener('click', function(event) {
         expirationMonth: document.querySelector('input[name=card_month]').value,
         expirationYear: document.querySelector('input[name=card_year]').value,
         success: function(res) {
+            //console.log('card token = ' + res.card.token);
             processPayment(res.card.token);
         },
         error: function(err) {
-            console.log(err);
+            console.log('Error', err);
         }
     });
 });

@@ -7,15 +7,20 @@ function processPayment(token) {
         _token: csrf
     };
 
+    //console.log('Process', data);
+
     $.ajax({
         type: 'POST',
-        url: urlProcess,
+        url: urlProccess,
         data: data,
         dataType: 'json',
         success: function(res) {
             alert(res.data.message);
             //console.log(res);
-            window.location.href = `${urlThanks} + '?order=' + ${res.data.order}`;
+            window.location.href = `${urlThanks}?order=${res.data.order}`;
+        },
+        error: function(err) {
+            //console.log('Error', err);
         }
     });
 }

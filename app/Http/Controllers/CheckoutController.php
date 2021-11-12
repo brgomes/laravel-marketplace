@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Payment\PagSeguro\CreditCard;
+use App\Payment\PagSeguro\Notification as PagSeguroNotification;
 use App\Store;
+use App\UserOrder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class CheckoutController extends Controller
 {
@@ -36,7 +39,7 @@ class CheckoutController extends Controller
             $cartItems = session()->get('cart');
             $user = auth()->user();
             $dataPost = $request->all();
-            $reference = 'XPTO';
+            $reference = uniqid();
             $stores = array_unique(array_column($cartItems, 'store_id'));
 
             $creditCardPayment = new CreditCard($cartItems, $user, $dataPost, $reference);
@@ -48,7 +51,6 @@ class CheckoutController extends Controller
                 'pagseguro_code' => $result->getCode(),
                 'pagseguro_status' => $result->getStatus(),
                 'items' => serialize($cartItems),
-                'store_id' => 8,
             ];
 
             $userOrder = $user->orders()->create($userOrder);
@@ -82,6 +84,29 @@ class CheckoutController extends Controller
     public function thanks()
     {
         return view('thanks');
+    }
+
+    public function notification()
+    {
+        try {
+            $notification = (new PagSeguroNotification())->getTransaction();
+
+            $reference = base64_decode($notification->getReference());
+            $userOrder = UserOrder::whereReference($reference);
+            $userOrder->update([
+                'pagseguro_status' => $notification->getStatus(),
+            ]);
+
+            if ($notification->getStatus() == 3) {
+                // Pode liberar o pedido do usuário ou atualizar o status para "Em separação"
+                // Pode notificar o usuário que o pedido foi pago
+                // Pode notificar a loja da confirmação do pedido
+            }
+
+            return response()->json([], 204);
+        } catch (\Exception $e) {
+            return response()->json([$e->getMessage()], 500);
+        }
     }
 
     private function makePagSeguroSession()

@@ -21,15 +21,11 @@ class CreditCard
     {
         // Instantiate a new direct payment request, using Credit Card
         $creditCard = new \PagSeguro\Domains\Requests\DirectPayment\CreditCard();
-
-        /**
-         * @todo Change the receiver Email
-         */
         $creditCard->setReceiverEmail(env('PAGSEGURO_EMAIL'));
 
         // Set a reference code for this payment request. It is useful to identify this payment
         // in future notifications.
-        $creditCard->setReference($this->reference);
+        $creditCard->setReference(base64_encode($this->reference));
 
         // Set the currency
         $creditCard->setCurrency("BRL");
