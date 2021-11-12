@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use App\Product;
 use App\Store;
 use Illuminate\Database\Seeder;
