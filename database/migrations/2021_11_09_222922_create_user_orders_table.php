@@ -20,6 +20,8 @@ class CreateUserOrdersTable extends Migration
             $table->string('pagseguro_code');
             $table->string('pagseguro_status');
             $table->text('items');
+            $table->string('type');
+            $table->string('link_boleto')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');

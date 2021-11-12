@@ -2,60 +2,85 @@
 
 @section('content')
     <div class="container">
-        <div class="col-md-6">
-            <div class="row">
-                <div class="col-md-12 msg">
-                    
+
+
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <a class="nav-link active" id="creditCard-tab" data-toggle="tab" href="#creditCard" role="tab"
+                    aria-controls="creditCard" aria-selected="true">Cartão de Crédito</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="boleto-tab" data-toggle="tab" href="#boleto" role="tab" aria-controls="boleto"
+                    aria-selected="false">Boleto</a>
+            </li>
+        </ul>
+        <div class="tab-content pt-5" id="myTabContent">
+            <div class="tab-pane fade show active" id="creditCard" role="tabpanel" aria-labelledby="creditCard-tab">
+                <!-- Cartão de Crédito Conteúdo Tab-->
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h2>Dados para Pagamento</h2>
+                            <hr>
+                        </div>
+                    </div>
+                    <form action="" method="post">
+                        <div class="row">
+                            <div class="col-md-12 form-group">
+                                <label>Nome no cartão</label>
+                                <input type="text" class="form-control" name="card_name">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12 form-group">
+                                <label>Número do cartão <span class="brand"></span></label>
+                                <input type="text" class="form-control" name="card_number">
+                                <input type="hidden" name="card_brand">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4 form-group">
+                                <label>Mês de expiração</label>
+                                <input type="text" class="form-control" name="card_month">
+                            </div>
+
+                            <div class="col-md-4 form-group">
+                                <label>Ano de expiração</label>
+                                <input type="text" class="form-control" name="card_year">
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-5 form-group">
+                                <label>Código de segurança</label>
+                                <input type="text" class="form-control" name="card_cvv">
+                            </div>
+
+                            <div class="col-md-12 installments form-group"></div>
+                        </div>
+
+                        <button class="btn btn-success btn-lg processCheckout" data-payment-type="CREDITCARD">Efetuar pagamento</button>
+                    </form>
                 </div>
+                <!-- Fim Cartão de Crédito Conteúdo Tab-->
             </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <h2>Dados para pagamento</h2>
-                    <hr>
+
+            <div class="tab-pane fade" id="boleto" role="tabpanel" aria-labelledby="boleto-tab">
+
+                <div class="row">
+                    <div class="col-12">
+                        <h2>Pagar com Boleto</h2>
+                        <button class="btn btn-success btn-lg processCheckout" data-payment-type="BOLETO">Emitir boleto</button>
+                    </div>
                 </div>
+
             </div>
-            <form action="" method="post">
-                <div class="row">
-                    <div class="col-md-12 form-group">
-                        <label>Nome no cartão</label>
-                        <input type="text" name="card_name" class="form-control">
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-12 form-group">
-                        <label>Número do cartão <span class="brand"></span></label>
-                        <input type="text" name="card_number" class="form-control">
-                        <input type="hidden" name="card_brand">
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-4 form-group">
-                        <label>Mês de expiração</label>
-                        <input type="text" name="card_month" class="form-control">
-                    </div>
-
-                    <div class="col-md-4 form-group">
-                        <label>Ano de expiração</label>
-                        <input type="text" name="card_year" class="form-control">
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-5 form-group">
-                        <label>Código de segurança</label>
-                        <input type="text" name="card_cvv" class="form-control">
-                    </div>
-
-                    <div class="col-md-7 form-group installments">
-                        
-                    </div>
-                </div>
-
-                <button class="btn btn-success processCheckout">Efetuar pagamento</button>
-            </form>
         </div>
+
+
     </div>
 @endsection
 

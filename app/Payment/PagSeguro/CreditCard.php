@@ -31,7 +31,6 @@ class CreditCard
         $creditCard->setCurrency("BRL");
 
         foreach ($this->items as $item) {
-            // Add an item for this payment request
             $creditCard->addItems()->withParameters(
                 $this->reference,
                 $item['name'],

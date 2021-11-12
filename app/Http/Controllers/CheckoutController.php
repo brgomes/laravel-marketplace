@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Payment\PagSeguro\Boleto;
 use App\Payment\PagSeguro\CreditCard;
 use App\Payment\PagSeguro\Notification as PagSeguroNotification;
 use App\Store;
@@ -47,16 +48,23 @@ class CheckoutController extends Controller
             $reference = uniqid();
             $stores = array_unique(array_column($cartItems, 'store_id'));
 
-            $creditCardPayment = new CreditCard($cartItems, $user, $dataPost, $reference);
+            $payment = ($dataPost['paymentType'] === 'BOLETO')
+                ? new Boleto($cartItems, $user, $reference, $dataPost['hash'])
+                : new CreditCard($cartItems, $user, $dataPost, $reference);
 
-            $result = $creditCardPayment->doPayment();
+            $result = $payment->doPayment();
 
             $userOrder = [
                 'reference' => $reference,
                 'pagseguro_code' => $result->getCode(),
                 'pagseguro_status' => $result->getStatus(),
                 'items' => serialize($cartItems),
+                'type' => $dataPost['paymentType'],
             ];
+
+            if ($dataPost['paymentType'] == 'BOLETO') {
+                $userOrder['link_boleto'] = $result->getPaymentLink();
+            }
 
             $userOrder = $user->orders()->create($userOrder);
             $userOrder->stores()->sync($stores);
@@ -67,15 +75,20 @@ class CheckoutController extends Controller
             session()->forget('cart');
             session()->forget('pagseguro_session_code');
 
-            return response()->json([
-                'data' => [
-                    'status' => true,
-                    'message' => 'Pedido criado com sucesso.',
-                    'order' => $reference,
-                ]
-            ]);
+            $dataJson = [
+                'status' => true,
+                'message' => 'Pedido criado com sucesso.',
+                'order' => $reference,
+            ];
+
+            if ($dataPost['paymentType'] == 'BOLETO') {
+                $dataJson['link_boleto'] = $result->getPaymentLink();
+            }
+
+            return response()->json(['data' => $dataJson]);
         } catch (\Exception $e) {
-            $message = env('APP_DEBUG') ? simplexml_load_string($e->getMessage()) : 'Erro ao processar pedido.';
+            //$message = env('APP_DEBUG') ? simplexml_load_string($e->getMessage()) : 'Erro ao processar pedido.';
+            $message = env('APP_DEBUG') ? $e->getMessage() : 'Erro ao processar pedido.';
 
             return response()->json([
                 'data' => [
