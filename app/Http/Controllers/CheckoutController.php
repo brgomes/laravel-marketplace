@@ -58,7 +58,7 @@ class CheckoutController extends Controller
                 'reference' => $reference,
                 'pagseguro_code' => $result->getCode(),
                 'pagseguro_status' => $result->getStatus(),
-                'items' => serialize($cartItems),
+                'items' => $cartItems,
                 'type' => $dataPost['paymentType'],
             ];
 
