@@ -91,6 +91,7 @@
     </div>
 
     @yield('scripts')
+    @stack('component-scripts')
 
     <script src="{{ asset('js/app.js') }}"></script>
 </body>

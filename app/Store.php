@@ -36,4 +36,9 @@ class Store extends Model
             return $store->user;
         })->each->notify(new StoreReceiveNewOrder());
     }
+
+    public function getZipcodeAttribute()
+    {
+        return '01001-000';
+    }
 }

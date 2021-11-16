@@ -46,6 +46,17 @@
                     </div>
                     <button class="btn btn-danger">Comprar</button>
                 </form>
+                <hr>
+            </div>
+
+            <div class="col-md-12">
+
+                <!-- Blade component -->
+                <x-shipping :url="'/api/shipping'" />
+
+                <div class="mt-4">
+                    
+                </div>
             </div>
         </div>
     </div>
@@ -63,8 +74,8 @@
         let thumb = document.querySelector('img.thumb');
         let imgSmall = document.querySelectorAll('img.img-small');
 
-        imgSmall.forEach(function (el) {
-            el.addEventListener('click', function () {
+        imgSmall.forEach(function(el) {
+            el.addEventListener('click', function() {
                 thumb.src = el.src;
             })
         });

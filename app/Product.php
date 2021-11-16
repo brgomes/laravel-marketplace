@@ -34,6 +34,11 @@ class Product extends Model
         return $this->hasMany(ProductPhoto::class);
     }
 
+    public function getShippingOptsAttribute()
+    {
+        return [16, 16, 16, .2, 1]; // largura, algura, comprimento, peso e quantidade
+    }
+
     /*public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
