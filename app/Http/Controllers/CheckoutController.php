@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UserOrderedItems;
 use App\Payment\PagSeguro\Boleto;
 use App\Payment\PagSeguro\CreditCard;
 use App\Payment\PagSeguro\Notification as PagSeguroNotification;
@@ -68,6 +69,9 @@ class CheckoutController extends Controller
 
             $userOrder = $user->orders()->create($userOrder);
             $userOrder->stores()->sync($stores);
+
+            //UserOrderedItems::dispatch($userOrder);
+            event(new UserOrderedItems($userOrder));
 
             // Notifica loja de novo pedido
             $store = (new Store())->notifyStoreOwners($stores);

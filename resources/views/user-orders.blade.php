@@ -24,8 +24,7 @@
                             data-parent="#accordionExample">
                             <div class="card-body">
                                 <ul>
-                                    @php $items = unserialize($order->items) @endphp
-                                    @foreach ($items as $item)
+                                    @foreach ($order->items as $item)
                                         <li>
                                             {{ $item['name'] }} &bullet; Qtde: {{ $item['number'] }}
                                             <br>
